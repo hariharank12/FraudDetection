@@ -20,7 +20,7 @@ public class TransactionTest extends FraudDetectionBaseTest {
     @Test
     public void assignAndTestTransactionValues() {
         String accountNumber = "12345";
-        String date = "2014-04-29T13:15:54.000000";
+        String date = "2014-04-29T13:15:54.00Z";
         double amount = 10.00;
         Transaction transaction = prepareTransaction(accountNumber, date, amount);
         assertThat(transaction.getHexCreditCardNumber(), equalTo(FraudDetectionUtil.md5Hash(accountNumber)));

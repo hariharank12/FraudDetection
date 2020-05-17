@@ -8,7 +8,7 @@ public class FraudDetectionException extends RuntimeException {
     /**
      * Error message sent from handlers.
      *
-     * @param message
+     * @param message Error message from validation.
      */
     public FraudDetectionException(String message) {
         super(message);

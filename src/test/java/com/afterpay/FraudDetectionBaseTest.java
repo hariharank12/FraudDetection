@@ -14,15 +14,14 @@ public class FraudDetectionBaseTest {
     /**
      * Method that prepares transaction record.
      *
-     * @param accountNumber
-     * @param date
-     * @param amount
+     * @param accountNumber account number.
+     * @param date date
+     * @param amount transaction amount
      * @return Transaction record.
      */
     protected Transaction prepareTransaction(String accountNumber, String date, double amount) {
-        Transaction transaction = new Transaction(FraudDetectionUtil.md5Hash(accountNumber),
+        return new Transaction(FraudDetectionUtil.md5Hash(accountNumber),
                 FraudDetectionUtil.parseDate(date), amount);
-        return transaction;
     }
 
     /**
@@ -31,18 +30,17 @@ public class FraudDetectionBaseTest {
      * @return
      */
     protected List<Transaction> prepareTransactionTestData() {
-        List<Transaction> transactions = Arrays.asList(prepareTransaction("12345",
-                "2014-04-29T13:15:54.000000", 10.00), prepareTransaction("12345",
-                "2014-04-29T13:16:54.000000", 20.00), prepareTransaction("62345",
-                "2014-04-29T13:15:54.000000", 11.11), prepareTransaction("62345",
-                "2014-04-29T13:16:54.000000", 12.12), prepareTransaction("72345",
-                "2014-05-29T13:15:54.000000", 25.89), prepareTransaction("72345",
-                "2014-05-29T13:16:54.000000", 45.10), prepareTransaction("82345",
-                "2014-04-29T13:15:54.000000", 10.10), prepareTransaction("82345",
-                "2014-04-29T13:18:54.000000", 10.10), prepareTransaction("92345",
-                "2014-04-29T13:15:54.000000", 5.67), prepareTransaction("92345",
-                "2014-04-29T13:17:54.000000", -3.25));
-        return transactions;
+        return Arrays.asList(prepareTransaction("12345",
+                "2014-04-29T13:15:54.00Z", 10.00), prepareTransaction("12345",
+                "2014-04-29T13:16:54.00Z", 20.00), prepareTransaction("62345",
+                "2014-04-29T13:15:54.00Z", 11.11), prepareTransaction("62345",
+                "2014-04-29T13:16:54.00Z", 12.12), prepareTransaction("72345",
+                "2014-05-29T13:15:54.00Z", 25.89), prepareTransaction("72345",
+                "2014-05-29T13:16:54.00Z", 45.10), prepareTransaction("82345",
+                "2014-04-29T13:15:54.00Z", 10.10), prepareTransaction("82345",
+                "2014-04-29T13:18:54.00Z", 10.10), prepareTransaction("92345",
+                "2014-04-29T13:15:54.00Z", 5.67), prepareTransaction("92345",
+                "2014-04-29T13:17:54.00Z", -3.25));
     }
 
 }

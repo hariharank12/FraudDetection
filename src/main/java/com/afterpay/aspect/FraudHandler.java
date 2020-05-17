@@ -6,9 +6,8 @@ import com.afterpay.service.FraudDetectionService;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * Aspect validation to validate inputs before invoking the algorithm.
@@ -16,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class FraudHandler implements InvocationHandler {
 
-    private FraudDetectionService fraudDetectionService;
+    private final FraudDetectionService fraudDetectionService;
 
     /**
      * Parameterized constructor containing reference to service call.
@@ -30,10 +29,10 @@ public class FraudHandler implements InvocationHandler {
     /**
      * Dynamic Proxies to filter the service calls.
      *
-     * @param proxy
-     * @param method
-     * @param args
-     * @return
+     * @param proxy Object proxy
+     * @param method Reflection method containing the method
+     * @param args commandline arguments
+     * @return Object
      * @throws IllegalAccessException
      * @throws IllegalArgumentException
      * @throws InvocationTargetException
@@ -41,22 +40,20 @@ public class FraudHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
         validate(args);
-        List<String> result = (List<String>) method.invoke(fraudDetectionService, args);
-        return result;
+        return method.invoke(fraudDetectionService, args);
     }
 
     /**
      * Perform validation of fromd date, to date and hour range.
      *
-     * @param args
+     * @param args commandline arguments passed from the main function.
      */
     private void validate(Object[] args) {
-        Date fromDate = (Date) args[1];
-        Date toDate = (Date) args[2];
-        long hoursDifference = TimeUnit.HOURS.convert(Math.abs(toDate.getTime() - fromDate.getTime()), TimeUnit.MILLISECONDS);
+        Instant fromDate = (Instant) args[1];
+        Instant toDate = (Instant) args[2];
         if (fromDate.compareTo(toDate) > 0) {
             throw new FraudDetectionException("From Date cannot be greater than To Date");
-        } else if (hoursDifference > 24) {
+        } else if (Duration.between(fromDate, toDate).toHours() > 24) {
             throw new FraudDetectionException("Number of hours is greater than 24 hours sliding window");
         }
     }

@@ -25,7 +25,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 public class FraudDetectionServiceTest extends FraudDetectionBaseTest {
 
     @Rule
-    public ExpectedException exception = ExpectedException.none();
+    public final ExpectedException exception = ExpectedException.none();
     private FraudDetectionService fraudDetectionService;
 
     /**
@@ -46,8 +46,8 @@ public class FraudDetectionServiceTest extends FraudDetectionBaseTest {
     @Test
     public void suspiciousAccountsHasSizeThree() {
         List<String> suspiciousAccountIds = fraudDetectionService.findFraudulentTransactions(
-                prepareTransactionTestData(), FraudDetectionUtil.parseDate("2014-04-29T00:00:00.000000"),
-                FraudDetectionUtil.parseDate("2014-04-30T00:00:00.000000"), 15.00);
+                prepareTransactionTestData(), FraudDetectionUtil.parseDate("2014-04-29T00:00:00.00Z"),
+                FraudDetectionUtil.parseDate("2014-04-30T00:00:00.00Z"), 15.00);
         assertThat(suspiciousAccountIds, hasSize(3));
     }
 
@@ -58,9 +58,9 @@ public class FraudDetectionServiceTest extends FraudDetectionBaseTest {
     public void throwFraudDetectionExceptionWhenFromDateisAfterToDate() {
         exception.expect(FraudDetectionException.class);
         exception.expectMessage("From Date cannot be greater than To Date");
-        List<String> suspiciousAccountIds = fraudDetectionService.findFraudulentTransactions(
-                prepareTransactionTestData(), FraudDetectionUtil.parseDate("2014-04-30T00:00:00.000000"),
-                FraudDetectionUtil.parseDate("2014-04-29T00:00:00.000000"), 15.00);
+        fraudDetectionService.findFraudulentTransactions(
+                prepareTransactionTestData(), FraudDetectionUtil.parseDate("2014-04-30T00:00:00.00Z"),
+                FraudDetectionUtil.parseDate("2014-04-29T00:00:00.00Z"), 35.00);
     }
 
     /**
@@ -70,9 +70,9 @@ public class FraudDetectionServiceTest extends FraudDetectionBaseTest {
     public void throwFraudDetectionExceptionWhenDateRangeisGreaterThan24Hours() {
         exception.expect(FraudDetectionException.class);
         exception.expectMessage("Number of hours is greater than 24 hours sliding window");
-        List<String> suspiciousAccountIds = fraudDetectionService.findFraudulentTransactions(
-                prepareTransactionTestData(), FraudDetectionUtil.parseDate("2014-04-29T00:00:00.000000"),
-                FraudDetectionUtil.parseDate("2014-04-30T10:00:00.000000"), 15.00);
+        fraudDetectionService.findFraudulentTransactions(
+                prepareTransactionTestData(), FraudDetectionUtil.parseDate("2014-04-29T00:00:00.00Z"),
+                FraudDetectionUtil.parseDate("2014-04-30T10:00:00.00Z"), 15.00);
     }
 
     /**

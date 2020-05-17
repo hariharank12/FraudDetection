@@ -3,7 +3,7 @@ package com.afterpay.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Transaction class containing transaction id and amount
@@ -13,6 +13,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class Transaction {
     String hexCreditCardNumber;
-    Date timestamp;
+    Instant timestamp;
     Double amount;
 }
